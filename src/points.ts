@@ -21,11 +21,13 @@ const defaults: IPointsSettings = {
   latitudeKey: null,
   setupClick: null,
   setupHover: null,
+  setupContextMenu: null,
   vertexShaderSource: null,
   fragmentShaderSource: null,
   eachVertex: null,
   click: null,
   hover: null,
+  contextmenu: null,
   color: Color.random,
   opacity: 0.8,
   size: null,
@@ -393,6 +395,54 @@ export class Points extends Base<IPointsSettings> {
       found.chosenSize * sensitivity
     )) {
       result = click(e, found.feature || found.latLng, xy);
+      return result !== undefined ? result : true;
+    }
+  }
+
+  static tryRightClick(e: LeafletMouseEvent, map: Map): boolean | void {
+    const closestFromEach: IPointLookup[] = []
+      , instancesLookup = {}
+      ;
+    let result
+      , settings: IPointsSettings
+      , instance: Points
+      , pointLookup: IPointLookup
+      , xy: Point
+      , found: IPointLookup
+      , foundLatLng
+      ;
+
+    Points.instances.forEach((_instance) => {
+      settings = _instance.settings;
+      if (!_instance.active) return;
+      if (settings.map !== map) return;
+      if (!settings.contextmenu) return;
+
+      pointLookup = _instance.lookup(e.latlng);
+      instancesLookup[pointLookup.key] = _instance;
+      closestFromEach.push(pointLookup);
+    });
+
+    if (closestFromEach.length < 1) return;
+    if (!settings) return;
+
+    found = this.closest(e.latlng, closestFromEach, map);
+
+    if (found === null) return;
+
+    instance = instancesLookup[found.key];
+    if (!instance) return;
+    const { latitudeKey, longitudeKey, sensitivity, contextmenu } = instance.settings;
+
+    foundLatLng = new LatLng(found.latLng[latitudeKey], found.latLng[longitudeKey]);
+    xy = map.latLngToLayerPoint(foundLatLng);
+
+    if (pointInCircle(
+      xy,
+      e.layerPoint,
+      found.chosenSize * sensitivity
+    )) {
+      result = contextmenu(e, found.feature || found.latLng, xy);
       return result !== undefined ? result : true;
     }
   }

@@ -19,10 +19,12 @@ export const defaults: IShapeSettings = {
   latitudeKey: null,
   setupClick: null,
   setupHover: null,
+  setupContextMenu: null,
   vertexShaderSource: null,
   fragmentShaderSource: null,
   click: null,
   hover: null,
+  contextmenu: null,
   color: Color.random,
   className: '',
   opacity: 0.5,
@@ -268,6 +270,27 @@ export class Shapes extends Base<IShapeSettings> {
       feature = _instance.polygonLookup.search(e.latlng.lng, e.latlng.lat);
       if (feature) {
         result = settings.click(e, feature);
+      }
+    });
+
+    return result !== undefined ? result : true;
+  }
+
+  static tryRightClick(e: LeafletMouseEvent, map: Map): boolean {
+    let result
+      , settings
+      , feature
+      ;
+
+    Shapes.instances.forEach(function (_instance) {
+      settings = _instance.settings;
+      if (!_instance.active) return;
+      if (settings.map !== map) return;
+      if (!settings.contextmenu) return;
+
+      feature = _instance.polygonLookup.search(e.latlng.lng, e.latlng.lat);
+      if (feature) {
+        result = settings.contextmenu(e, feature);
       }
     });
 

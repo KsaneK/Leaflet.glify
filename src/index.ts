@@ -66,6 +66,7 @@ class Glify {
     return new this.Points({
       setupClick: glify.setupClick.bind(this),
       setupHover: this.setupHover.bind(this),
+      setupContextMenu: this.setupContextMenu.bind(this),
       latitudeKey: glify.latitudeKey,
       longitudeKey: glify.longitudeKey,
       vertexShaderSource: () => {
@@ -82,6 +83,7 @@ class Glify {
     return new this.Shapes({
       setupClick: this.setupClick.bind(this),
       setupHover: this.setupHover.bind(this),
+      setupContextMenu: this.setupContextMenu.bind(this),
       latitudeKey: this.latitudeKey,
       longitudeKey: this.longitudeKey,
       vertexShaderSource: () => {
@@ -98,6 +100,7 @@ class Glify {
     return new this.Lines({
       setupClick: this.setupClick.bind(this),
       setupHover: this.setupHover.bind(this),
+      setupContextMenu: this.setupContextMenu.bind(this),
       latitudeKey: this.latitudeKey,
       longitudeKey: this.longitudeKey,
       vertexShaderSource: () => {
@@ -125,6 +128,23 @@ class Glify {
         if (hit !== undefined) return hit;
       });
     }
+  }
+
+  setupContextMenu(map?: Map): void {
+    if (this.maps.indexOf(map) < 0) {
+      this.maps.push(map);
+    }
+    map.on('contextmenu', (e: LeafletMouseEvent) => {
+      let hit;
+      hit = Points.tryRightClick(e, map);
+      if (hit !== undefined) return hit;
+
+      hit = Lines.tryRightClick(e, map);
+      if (hit !== undefined) return hit;
+
+      hit = Shapes.tryRightClick(e, map);
+      if (hit !== undefined) return hit;
+    });
   }
 
   setupHover(map?: Map, hoverWait?: 250, immediate?: false): void {

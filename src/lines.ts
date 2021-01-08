@@ -18,10 +18,12 @@ const defaults: ILinesSettings = {
   latitudeKey: null,
   setupClick: null,
   setupHover: null,
+  setupContextMenu: null,
   vertexShaderSource: null,
   fragmentShaderSource: null,
   click: null,
   hover: null,
+  contextmenu: null,
   color: Color.random,
   className: '',
   opacity: 0.5,
@@ -275,6 +277,40 @@ export class Lines extends Base<ILinesSettings> {
 
     if (instance) {
       instance.settings.click(e, foundFeature);
+    } else {
+      return;
+    }
+  }
+
+  static tryRightClick(e: LeafletMouseEvent, map: Map): void {
+    let foundFeature = false
+      , instance = null
+      , sensitivity
+      , settings
+      ;
+    Lines.instances.forEach(function (_instance) {
+      settings = _instance.settings;
+      sensitivity = settings.sensitivity;
+      if (!_instance.active) return;
+      if (settings.map !== map) return;
+      if (!settings.contextmenu) return;
+
+      settings.data.features.map(feature => {
+        for (let i = 1; i < feature.geometry.coordinates.length; i++) {
+          let distance = pDistance(e.latlng.lng, e.latlng.lat,
+            feature.geometry.coordinates[i - 1][0], feature.geometry.coordinates[i - 1][1],
+            feature.geometry.coordinates[i][0], feature.geometry.coordinates[i][1]);
+          if (distance < sensitivity) {
+            sensitivity = distance;
+            foundFeature = feature;
+            instance = _instance;
+          }
+        }
+      });
+    });
+
+    if (instance) {
+      instance.settings.contextmenu(e, foundFeature);
     } else {
       return;
     }

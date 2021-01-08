@@ -20,11 +20,13 @@ export interface IBaseSettings {
   latitudeKey?: number;
   setupClick?: (map: Map) => void;
   setupHover?: (map: Map, hoverWait: number) => void;
+  setupContextMenu?: (map: Map) => void;
   vertexShaderSource?: (() => string) | string;
   fragmentShaderSource?: (() => string) | string;
   canvas?: HTMLCanvasElement;
   click?: (e, feature, xy: Point) => boolean | void;
   hover?: (e, feature, xy: Point) => boolean | void;
+  contextmenu?: (e, feature, xy: Point) => boolean | void;
   color?: ((featureIndex: number, feature: any) => IColor) | IColor;
   className?: string;
   opacity?: number;
@@ -129,6 +131,9 @@ export abstract class Base<T extends IBaseSettings = IBaseSettings> {
     }
     if (settings.hover) {
       settings.setupHover(settings.map, settings.hoverWait);
+    }
+    if (settings.contextmenu) {
+      settings.setupContextMenu(settings.map);
     }
 
     return this
