@@ -1,5 +1,5 @@
 {
-  "name": "leaflet.glify",
+  "name": "@ksanek/leaflet.glify",
   "version": "3.1.0",
   "description": "web gl renderer plugin for leaflet",
   "main": "dist/glify.js",
@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robertleeplummerjr/Leaflet.glify.git"
+    "url": "git+https://github.com/KsaneK/Leaflet.glify.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/robertleeplummerjr/Leaflet.glify/issues"
+    "url": "https://github.com/KsaneK/Leaflet.glify/issues"
   },
-  "homepage": "https://github.com/robertleeplummerjr/Leaflet.glify#readme",
+  "homepage": "https://github.com/KsaneK/Leaflet.glify#readme",
   "dependencies": {
     "@types/geojson": "^7946.0.7",
     "earcut": "^2.1.3",
@@ -36,28 +36,28 @@
     "leaflet": "1.7.1",
     "point-in-polygon": "^1.0.1",
     "polygon-lookup": "^2.4.0",
-    "rbush": "^2.0.2"
+    "rbush": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@types/leaflet": "^1.5.17",
     "brfs": "^2.0.1",
-    "gh-pages": "^2.2.0",
+    "gh-pages": "^3.1.0",
     "glslify-bundle": "^5.1.1",
     "glslify-deps": "^1.3.1",
-    "jest": "^25.2.7",
+    "jest": "^26.6.3",
     "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "parcel-plugin-glsl": "^0.1.0",
-    "webpack": "^4.43.0",
+    "webpack": "^5.12.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-cli": "^3.3.12",
-    "copy-webpack-plugin": "^6.0.3",
+    "webpack-cli": "^4.3.1",
+    "copy-webpack-plugin": "^7.0.0",
     "glslify-loader": "^2.0.0",
     "raw-loader": "^4.0.1",
     "ts-loader": "^8.0.1",
-    "typescript": "^3.8.3"
+    "typescript": "^4.1.3"
   }
 }
